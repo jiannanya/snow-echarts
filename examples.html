@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ECharts Examples Gallery</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts-gl@2/dist/echarts-gl.min.js" onerror="window.glFailed=true"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body { display: flex; min-height: 100vh; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f4f6f9; color: #333; }
+
+  /* Sidebar */
+  #sidebar {
+    width: 220px; min-width: 220px; background: #1a1f2e; color: #c8cdd8;
+    display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; overflow-y: auto; z-index: 10;
+  }
+  #sidebar h1 { font-size: 15px; font-weight: 700; padding: 18px 16px 12px; color: #fff; border-bottom: 1px solid #2d3447; letter-spacing: .5px; }
+  #sidebar .cat-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #5c6480; padding: 14px 16px 4px; }
+  #sidebar a { display: block; padding: 6px 16px; font-size: 13px; color: #c8cdd8; text-decoration: none; border-radius: 0; transition: background .15s, color .15s; }
+  #sidebar a:hover, #sidebar a.active { background: #2d3447; color: #6db3f2; }
+
+  /* Main */
+  #main { flex: 1; padding: 28px 32px; overflow-y: auto; }
+  #main h2 { font-size: 22px; margin-bottom: 18px; color: #1a1f2e; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
+
+  /* Grid */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 22px; margin-bottom: 40px; }
+
+  /* Card */
+  .card {
+    background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    display: flex; flex-direction: column; overflow: hidden; transition: box-shadow .2s;
+  }
+  .card:hover { box-shadow: 0 6px 20px rgba(0,0,0,.13); }
+  .card-header { padding: 14px 16px 8px; }
+  .card-title { font-size: 15px; font-weight: 600; color: #1a1f2e; }
+  .card-desc { font-size: 12px; color: #6b7280; margin-top: 3px; }
+  .chart-wrap { height: 240px; position: relative; }
+  .chart-wrap canvas { display: block; }
+  .note { display: flex; align-items: center; justify-content: center; height: 100%; font-size: 13px; color: #9ca3af; background: #f9fafb; text-align: center; padding: 16px; }
+  .card-footer { border-top: 1px solid #f0f2f5; padding: 8px 12px; display: flex; justify-content: flex-end; gap: 8px; }
+  .btn-code {
+    font-size: 12px; padding: 4px 12px; border: 1px solid #d1d5db; border-radius: 6px;
+    background: #fff; cursor: pointer; color: #374151; transition: background .15s;
+  }
+  .btn-code:hover { background: #f3f4f6; }
+
+  /* Code panel */
+  .code-panel { display: none; border-top: 1px solid #e5e7eb; background: #1e2130; }
+  .code-panel.open { display: block; }
+  .code-panel pre { font-size: 11.5px; color: #a8daff; padding: 14px 16px; overflow-x: auto; max-height: 260px; white-space: pre; }
+
+  /* Top bar */
+  #topbar { background: #1a1f2e; color: #fff; padding: 0 32px; height: 52px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 20; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
+  #topbar h1 { font-size: 16px; font-weight: 700; letter-spacing: .5px; }
+  #topbar a { color: #6db3f2; font-size: 12px; text-decoration: none; }
+  #topbar a:hover { text-decoration: underline; }
+
+  @media (max-width: 768px) {
+    #sidebar { display: none; }
+    #main { padding: 16px; }
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav id="sidebar">
+  <h1>ECharts Gallery</h1>
+  <div class="cat-label">Core Charts</div>
+  <a href="#sec-bar">Bar</a>
+  <a href="#sec-line">Line</a>
+  <a href="#sec-pie">Pie</a>
+  <a href="#sec-scatter">Scatter</a>
+  <div class="cat-label">Financial / Scientific</div>
+  <a href="#sec-candlestick">Candlestick</a>
+  <a href="#sec-boxplot">Boxplot</a>
+  <a href="#sec-heatmap">Heatmap</a>
+  <a href="#sec-radar">Radar</a>
+  <div class="cat-label">Geographic</div>
+  <a href="#sec-map">Map / Geo</a>
+  <div class="cat-label">Hierarchical</div>
+  <a href="#sec-tree">Tree</a>
+  <a href="#sec-treemap">Treemap</a>
+  <a href="#sec-sunburst">Sunburst</a>
+  <div class="cat-label">Flow / Relations</div>
+  <a href="#sec-graph">Graph</a>
+  <a href="#sec-sankey">Sankey</a>
+  <a href="#sec-parallel">Parallel</a>
+  <a href="#sec-chord">Chord (v6+)</a>
+  <div class="cat-label">Special Charts</div>
+  <a href="#sec-funnel">Funnel</a>
+  <a href="#sec-gauge">Gauge</a>
+  <a href="#sec-pictorial">PictorialBar</a>
+  <a href="#sec-themeriver">ThemeRiver</a>
+  <a href="#sec-calendar">Calendar</a>
+  <div class="cat-label">Modern / Utility</div>
+  <a href="#sec-custom">Custom Series</a>
+  <a href="#sec-dataset">Dataset</a>
+  <a href="#sec-datazoom">DataZoom</a>
+  <div class="cat-label">Mixed / Advanced</div>
+  <a href="#sec-mixed">Mixed Charts</a>
+  <a href="#sec-realtime">Real-Time</a>
+  <div class="cat-label">3D Charts (GL)</div>
+  <a href="#sec-3d">3D Charts</a>
+</nav>
+
+<div style="flex:1;display:flex;flex-direction:column;">
+<header id="topbar">
+  <h1>Apache ECharts — Examples Gallery</h1>
+  <div>
+    <a href="https://echarts.apache.org/examples/en/index.html" target="_blank">Official Examples ↗</a>
+    &nbsp;&nbsp;
+    <a href="assets/official-examples.md" target="_blank">Full Link Catalog</a>
+    &nbsp;&nbsp;
+    <a href="examples/README.md" target="_blank">Detailed Examples</a>
+  </div>
+</header>
+
+<div id="main">
+
+<!-- ===== BAR ===== -->
+<h2 id="sec-bar">Bar Charts</h2>
+<div class="grid" id="grid-bar"></div>
+
+<!-- ===== LINE ===== -->
+<h2 id="sec-line">Line Charts</h2>
+<div class="grid" id="grid-line"></div>
+
+<!-- ===== PIE ===== -->
+<h2 id="sec-pie">Pie Charts</h2>
+<div class="grid" id="grid-pie"></div>
+
+<!-- ===== SCATTER ===== -->
+<h2 id="sec-scatter">Scatter Charts</h2>
+<div class="grid" id="grid-scatter"></div>
+
+<!-- ===== CANDLESTICK ===== -->
+<h2 id="sec-candlestick">Candlestick Charts</h2>
+<div class="grid" id="grid-candlestick"></div>
+
+<!-- ===== BOXPLOT ===== -->
+<h2 id="sec-boxplot">Boxplot Charts</h2>
+<div class="grid" id="grid-boxplot"></div>
+
+<!-- ===== HEATMAP ===== -->
+<h2 id="sec-heatmap">Heatmap Charts</h2>
+<div class="grid" id="grid-heatmap"></div>
+
+<!-- ===== RADAR ===== -->
+<h2 id="sec-radar">Radar Charts</h2>
+<div class="grid" id="grid-radar"></div>
+
+<!-- ===== MAP ===== -->
+<h2 id="sec-map">Map / Geo Charts</h2>
+<div class="grid" id="grid-map"></div>
+
+<!-- ===== TREE ===== -->
+<h2 id="sec-tree">Tree Charts</h2>
+<div class="grid" id="grid-tree"></div>
+
+<!-- ===== TREEMAP ===== -->
+<h2 id="sec-treemap">Treemap Charts</h2>
+<div class="grid" id="grid-treemap"></div>
+
+<!-- ===== SUNBURST ===== -->
+<h2 id="sec-sunburst">Sunburst Charts</h2>
+<div class="grid" id="grid-sunburst"></div>
+
+<!-- ===== GRAPH ===== -->
+<h2 id="sec-graph">Graph / Network</h2>
+<div class="grid" id="grid-graph"></div>
+
+<!-- ===== SANKEY ===== -->
+<h2 id="sec-sankey">Sankey Charts</h2>
+<div class="grid" id="grid-sankey"></div>
+
+<!-- ===== PARALLEL ===== -->
+<h2 id="sec-parallel">Parallel Coordinates</h2>
+<div class="grid" id="grid-parallel"></div>
+
+<!-- ===== CHORD ===== -->
+<h2 id="sec-chord">Chord Charts <small style="font-size:13px;color:#6b7280;font-weight:400">(v6.0.0+)</small></h2>
+<div class="grid" id="grid-chord"></div>
+
+<!-- ===== FUNNEL ===== -->
+<h2 id="sec-funnel">Funnel Charts</h2>
+<div class="grid" id="grid-funnel"></div>
+
+<!-- ===== GAUGE ===== -->
+<h2 id="sec-gauge">Gauge Charts</h2>
+<div class="grid" id="grid-gauge"></div>
+
+<!-- ===== PICTORIAL ===== -->
+<h2 id="sec-pictorial">PictorialBar Charts</h2>
+<div class="grid" id="grid-pictorial"></div>
+
+<!-- ===== THEMERIVER ===== -->
+<h2 id="sec-themeriver">ThemeRiver Charts</h2>
+<div class="grid" id="grid-themeriver"></div>
+
+<!-- ===== CALENDAR ===== -->
+<h2 id="sec-calendar">Calendar Charts</h2>
+<div class="grid" id="grid-calendar"></div>
+
+<!-- ===== CUSTOM ===== -->
+<h2 id="sec-custom">Custom Series</h2>
+<div class="grid" id="grid-custom"></div>
+
+<!-- ===== DATASET ===== -->
+<h2 id="sec-dataset">Dataset</h2>
+<div class="grid" id="grid-dataset"></div>
+
+<!-- ===== DATAZOOM ===== -->
+<h2 id="sec-datazoom">DataZoom</h2>
+<div class="grid" id="grid-datazoom"></div>
+
+<!-- ===== MIXED ===== -->
+<h2 id="sec-mixed">Mixed Charts</h2>
+<div class="grid" id="grid-mixed"></div>
+
+<!-- ===== REALTIME ===== -->
+<h2 id="sec-realtime">Real-Time / Dynamic</h2>
+<div class="grid" id="grid-realtime"></div>
+
+<!-- ===== 3D ===== -->
+<h2 id="sec-3d">3D Charts <small style="font-size:13px;color:#6b7280;font-weight:400">(requires echarts-gl)</small></h2>
+<div class="grid" id="grid-3d"></div>
+
+</div><!-- /main -->
+</div>
+
+<script>
+/* ─── Example definitions ─────────────────────────────────────── */
+const EXAMPLES = [
+
+  /* ══ BAR ══════════════════════════════════════════════════════ */
+  {
+    grid:'bar', title:'Grouped Bar Chart', desc:'Multi-series grouped bar with legend',
+    option:{
+      tooltip:{trigger:'axis'},
+      legend:{data:['2022','2023','2024']},
+      xAxis:{type:'category',data:['Jan','Feb','Mar','Apr','May','Jun']},
+      yAxis:{type:'value'},
+      series:[
+        {name:'2022',type:'bar',data:[120,132,101,134,90,230]},
+        {name:'2023',type:'bar',data:[220,182,191,234,290,330]},
+        {name:'2024',type:'bar',data:[150,232,201,154,190,330]}
+      ]
+    }
+  },
+  {
+    grid:'bar', title:'Stacked Horizontal Bar', desc:'Stacked bar with horizontal orientation',
+    option:{
+      tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},
+      legend:{},
+      grid:{left:'3%',right:'4%',bottom:'3%',containLabel:true},
+      xAxis:{type:'value'},
+      yAxis:{type:'category',data:['Mon','Tue','Wed','Thu','Fri','Sat','Sun']},
+      series:[
+        {name:'Direct',type:'bar',stack:'total',data:[320,302,301,334,390,330,320]},
+        {name:'Mail Ad',type:'bar',stack:'total',data:[120,132,101,134,90,230,210]},
+        {name:'Search',type:'bar',stack:'total',data:[220,182,191,234,290,330,310]}
+      ]
+    }
+  },
+  {
+    grid:'bar', title:'Bar with Gradient Fill', desc:'Linear gradient on bar series',
+    option:{
+      xAxis:{data:['A','B','C','D','E','F']},
+      yAxis:{},
+      series:[{
+        type:'bar',
+        data:[5,20,36,10,10,20],
+        itemStyle:{
+          color:{type:'linear',x:0,y:0,x2:0,y2:1,
+            colorStops:[{offset:0,color:'#83bff6'},{offset:.5,color:'#188df0'},{offset:1,color:'#188df0'}]}
+        }
+      }]
+    }
+  },
+  {
+    grid:'bar', title:'Bar Race (Timeline)', desc:'Animated bar chart race using setInterval',
+    option:{
+      grid:{top:10,bottom:30,left:150,right:80},
+      xAxis:{max:'dataMax',axisLabel:{formatter:v=>Math.round(v)}},
+      yAxis:{type:'category',data:['Brazil','Indonesia','USA','India','China','World'],animationDuration:300,animationDurationUpdate:1300},
+      series:[{realtimeSort:true,type:'bar',data:[18203,23489,29034,104970,131744,630230],
+        label:{show:true,position:'right',valueAnimation:true}}],
+      legend:{show:true},
+      animationDuration:0,animationDurationUpdate:1300,animationEasing:'linear',animationEasingUpdate:'linear'
+    }
+  },
+
+  /* ══ LINE ══════════════════════════════════════════════════════ */
+  {
+    grid:'line', title:'Smooth Area Chart', desc:'Area chart with smooth curves and gradient fill',
+    option:{
+      tooltip:{trigger:'axis'},
+      xAxis:{type:'category',boundaryGap:false,data:['Mon','Tue','Wed','Thu','Fri','Sat','Sun']},
+      yAxis:{type:'value'},
+      series:[{
+        name:'Visits',type:'line',smooth:true,
+        areaStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,
+          colorStops:[{offset:0,color:'rgba(58,77,233,0.8)'},{offset:1,color:'rgba(58,77,233,0.1)'}]}},
+        data:[820,932,901,934,1290,1330,1320]
+      }]
+    }
+  },
+  {
+    grid:'line', title:'Dual Y-Axis Line', desc:'Two series on separate Y axes (rainfall + temperature)',
+    option:{
+      tooltip:{trigger:'axis',axisPointer:{type:'cross'}},
+      legend:{data:['Rainfall','Temperature']},
+      xAxis:[{type:'category',data:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']}],
+      yAxis:[{type:'value',name:'Rainfall',axisLabel:{formatter:'{value} ml'}},
+             {type:'value',name:'Temp',position:'right',axisLabel:{formatter:'{value} °C'}}],
+      series:[
+        {name:'Rainfall',type:'bar',data:[2.6,5.9,9.0,26.4,28.7,70.7,175.6,182.2,48.7,18.8,6.0,2.3]},
+        {name:'Temperature',type:'line',yAxisIndex:1,data:[2.0,2.2,3.3,4.5,6.3,10.2,20.3,23.4,23.0,16.5,12.0,6.2]}
+      ]
+    }
+  },
+  {
+    grid:'line', title:'Step Line Chart', desc:'Step-style line connecting data points',
+    option:{
+      tooltip:{trigger:'axis'},
+      legend:{data:['Step Start','Step Middle','Step End']},
+      xAxis:{type:'category',data:['Mon','Tue','Wed','Thu','Fri','Sat','Sun']},
+      yAxis:{type:'value'},
+      series:[
+        {name:'Step Start',type:'line',step:'start',data:[120,132,101,134,90,230,210]},
+        {name:'Step Middle',type:'line',step:'middle',data:[220,282,201,234,290,430,410]},
+        {name:'Step End',type:'line',step:'end',data:[450,432,401,454,590,530,510]}
+      ]
+    }
+  },
+
+  /* ══ PIE ═══════════════════════════════════════════════════════ */
+  {
+    grid:'pie', title:'Doughnut Chart', desc:'Ring-style pie chart with center label',
+    option:{
+      tooltip:{trigger:'item'},
+      legend:{orient:'vertical',left:'left'},
+      series:[{
+        type:'pie',radius:['40%','70%'],
+        label:{show:false,position:'center'},
+        emphasis:{label:{show:true,fontSize:18,fontWeight:'bold'}},
+        data:[
+          {value:1048,name:'Search Engine'},{value:735,name:'Direct'},
+          {value:580,name:'Email'},{value:484,name:'Union Ads'},{value:300,name:'Video Ads'}
+        ]
+      }]
+    }
+  },
+  {
+    grid:'pie', title:'Nightingale Rose Chart', desc:'Rose chart where radius encodes value',
+    option:{
+      tooltip:{trigger:'item'},
+      legend:{top:'5%',left:'center'},
+      series:[{
+        type:'pie',radius:['20%','70%'],roseType:'area',
+        itemStyle:{borderRadius:8},
+        data:[
+          {value:40,name:'Rose 1'},{value:38,name:'Rose 2'},{value:32,name:'Rose 3'},
+          {value:30,name:'Rose 4'},{value:28,name:'Rose 5'},{value:26,name:'Rose 6'},
+          {value:22,name:'Rose 7'},{value:18,name:'Rose 8'}
+        ]
+      }]
+    }
+  },
+
+  /* ══ SCATTER ═══════════════════════════════════════════════════ */
+  {
+    grid:'scatter', title:'Bubble Chart', desc:'Scatter with size encoding (symbolSize)',
+    option:{
+      tooltip:{formatter:p=>`(${p.data[0]}, ${p.data[1]}) size=${p.data[2]}`},
+      xAxis:{},yAxis:{},
+      series:[{
+        type:'scatter',
+        symbolSize:d=>Math.sqrt(d[2])*2,
+        data:[[10.0,8.04,18],[8.07,6.95,12],[13.0,7.58,22],[9.05,8.81,10],[11.0,8.33,25],
+              [14.0,9.96,30],[13.4,7.08,16],[10.0,4.42,28],[14.0,8.84,20],[12.5,6.81,14],
+              [9.15,7.97,8],[11.5,7.27,35],[3.03,4.21,9],[12.2,7.83,26],[2.02,4.65,5]]
+      }]
+    }
+  },
+  {
+    grid:'scatter', title:'Effect Scatter (Ripple)', desc:'Animated ripple effect on scatter points',
+    option:{
+      tooltip:{trigger:'item'},
+      xAxis:{type:'category',data:['Mon','Tue','Wed','Thu','Fri','Sat','Sun']},
+      yAxis:{type:'value'},
+      series:[
+        {type:'scatter',data:[120,132,101,134,90,230,210]},
+        {type:'effectScatter',data:[230],dataIndex:5,
+          rippleEffect:{brushType:'stroke'},label:{show:true,formatter:'Peak',position:'top'},
+          symbolSize:20}
+      ]
+    }
+  },
+
+  /* ══ CANDLESTICK ═══════════════════════════════════════════════ */
+  {
+    grid:'candlestick', title:'OHLC Candlestick', desc:'Basic candlestick with volume bars',
+    option:{
+      tooltip:{trigger:'axis',axisPointer:{type:'cross'}},
+      legend:{data:['OHLC','Volume']},
+      xAxis:[{type:'category',data:['2024/1','2024/2','2024/3','2024/4','2024/5','2024/6','2024/7','2024/8'],scale:true}],
+      yAxis:[{scale:true},{scale:true,gridIndex:0,splitNumber:2,axisLabel:{show:false},axisLine:{show:false},axisTick:{show:false},splitLine:{show:false}}],
+      dataZoom:[{type:'inside',xAxisIndex:[0],start:0,end:100},{type:'slider',xAxisIndex:[0],start:0,end:100}],
+      series:[
+        {name:'OHLC',type:'candlestick',
+         data:[[20,34,10,38],[40,35,30,50],[31,38,33,44],[38,15,5,42],[52,39,41,53],[44,28,28,44],[38,46,30,50],[44,56,30,60]]},
+        {name:'Volume',type:'bar',yAxisIndex:1,
+         data:[15000,14900,13600,14100,10200,13400,8200,14600],
+         itemStyle:{color:p=>p.data>12000?'#ef232a':'#14b143'}}
+      ]
+    }
+  },
+
+  /* ══ BOXPLOT ═══════════════════════════════════════════════════ */
+  {
+    grid:'boxplot', title:'Boxplot with Outliers', desc:'Box-and-whisker with individual outlier points',
+    option:{
+      tooltip:{trigger:'item',axisPointer:{type:'shadow'}},
+      legend:{data:['boxplot','outlier']},
+      xAxis:{type:'category',data:['Group A','Group B','Group C','Group D','Group E'],boundaryGap:true},
+      yAxis:{type:'value',splitArea:{show:true}},
+      series:[
+        {name:'boxplot',type:'boxplot',
+         data:[[655,850,940,980,1175],[655,850,940,980,1175].map(v=>v*1.1),[600,780,900,980,1100],[590,820,910,990,1020],[600,840,890,940,1060]]},
+        {name:'outlier',type:'scatter',data:[[0,400],[1,420],[2,555],[3,610],[4,310]]}
+      ]
+    }
+  },
+
+  /* ══ HEATMAP ═══════════════════════════════════════════════════ */
+  {
+    grid:'heatmap', title:'Hour × Day Heatmap', desc:'Cartesian heatmap (hours vs days of week)',
+    option:(()=>{
+      const hours=['12a','1a','2a','3a','4a','5a','6a','7a','8a','9a','10a','11a','12p','1p','2p','3p','4p','5p','6p','7p','8p','9p','10p','11p'];
+      const days=['Sat','Fri','Thu','Wed','Tue','Mon','Sun'];
+      const data=[];
+      for(let d=0;d<7;d++) for(let h=0;h<24;h++) data.push([h,d,Math.round(Math.random()*10)]);
+      return {
+        tooltip:{position:'top'},
+        grid:{height:'60%',top:'10%'},
+        xAxis:{type:'category',data:hours,splitArea:{show:true}},
+        yAxis:{type:'category',data:days,splitArea:{show:true}},
+        visualMap:{min:0,max:10,calculable:true,orient:'horizontal',left:'center',bottom:'15%'},
+        series:[{type:'heatmap',data,label:{show:true},emphasis:{itemStyle:{shadowBlur:10,shadowColor:'rgba(0,0,0,.5)'}}}]
+      };
+    })()
+  },
+
+  /* ══ RADAR ═════════════════════════════════════════════════════ */
+  {
+    grid:'radar', title:'Multi-Series Radar', desc:'Radar chart comparing two entities across 5 dimensions',
+    option:{
+      legend:{data:['Allocated Budget','Actual Spending']},
+      radar:{indicator:[{name:'Sales',max:6500},{name:'Admin',max:16000},{name:'IT',max:30000},{name:'Support',max:38000},{name:'Dev',max:52000},{name:'Marketing',max:25000}]},
+      series:[{
+        type:'radar',
+        data:[
+          {value:[4200,3000,20000,35000,50000,18000],name:'Allocated Budget'},
+          {value:[5000,14000,28000,26000,42000,21000],name:'Actual Spending'}
+        ]
+      }]
+    }
+  },
+
+  /* ══ MAP ════════════════════════════════════════════════════════ */
+  {
+    grid:'map', title:'Map / Geo Charts', desc:'Requires GeoJSON registration via echarts.registerMap()',
+    requiresMap: true
+  },
+
+  /* ══ TREE ═══════════════════════════════════════════════════════ */
+  {
+    grid:'tree', title:'Collapsible Tree', desc:'Expandable / collapsible org chart tree',
+    option:{
+      tooltip:{trigger:'item',triggerOn:'mousemove'},
+      series:[{
+        type:'tree',
+        data:[{
+          name:'root',children:[
+            {name:'A',children:[{name:'A1'},{name:'A2',children:[{name:'A2-1'}]}]},
+            {name:'B',children:[{name:'B1'},{name:'B2'}]},
+            {name:'C',collapsed:true,children:[{name:'C1'},{name:'C2'},{name:'C3'}]}
+          ]
+        }],
+        top:'1%',left:'7%',bottom:'1%',right:'20%',
+        symbolSize:7,
+        label:{position:'left',verticalAlign:'middle',align:'right',fontSize:9},
+        leaves:{label:{position:'right',verticalAlign:'middle',align:'left'}},
+        expandAndCollapse:true,animationDuration:550,animationDurationUpdate:750
+      }]
+    }
+  },
+  {
+    grid:'tree', title:'Radial Tree', desc:'Tree laid out in a radial / circular arrangement',
+    option:{
+      tooltip:{trigger:'item',triggerOn:'mousemove'},
+      series:[{
+        type:'tree',layout:'radial',
+        data:[{name:'root',children:[
+          {name:'A',children:[{name:'a1'},{name:'a2'}]},
+          {name:'B',children:[{name:'b1'},{name:'b2'}]},
+          {name:'C',children:[{name:'c1'},{name:'c2'},{name:'c3'}]},
+          {name:'D',children:[{name:'d1'}]}
+        ]}],
+        top:'1%',left:'1%',bottom:'1%',right:'1%',symbolSize:7,
+        label:{fontSize:9},expandAndCollapse:true,animationDuration:550,animationDurationUpdate:750
+      }]
+    }
+  },
+
+  /* ══ TREEMAP ════════════════════════════════════════════════════ */
+  {
+    grid:'treemap', title:'Treemap with Breadcrumb', desc:'Hierarchical area chart with drill-down',
+    option:{
+      tooltip:{formatter:'{b}: {c}'},
+      series:[{
+        type:'treemap',
+        data:[
+          {name:'nodeA',value:10,children:[{name:'nodeAa',value:4},{name:'nodeAb',value:6}]},
+          {name:'nodeB',value:20,children:[{name:'nodeBa',value:20,children:[{name:'nodeBa1',value:20}]}]},
+          {name:'nodeC',value:30,children:[{name:'nodeCa',value:18},{name:'nodeCb',value:12}]},
+          {name:'nodeD',value:15},
+          {name:'nodeE',value:25,children:[{name:'nodeEa',value:10},{name:'nodeEb',value:15}]}
+        ]
+      }]
+    }
+  },
+
+  /* ══ SUNBURST ═══════════════════════════════════════════════════ */
+  {
+    grid:'sunburst', title:'Sunburst Drill-Down', desc:'Multi-level hierarchy with clickable segments',
+    option:{
+      series:[{
+        type:'sunburst',
+        data:[
+          {name:'Grandpa',children:[
+            {name:'Uncle Leo',value:15,children:[{name:'Cousin Jack',value:2},{name:'Cousin Mary',value:5},{name:'Cousin Ben',value:4}]},
+            {name:'Father',value:10,children:[{name:'Me',value:5},{name:'Brother Peter',value:1}]}
+          ]},
+          {name:'Nancy',children:[{name:'Uncle Nike',children:[{name:'Cousin Ada',value:4},{name:'Cousin Chris',value:1}]}]}
+        ],
+        radius:[0,'90%'],
+        label:{rotate:'radial'}
+      }]
+    }
+  },
+
+  /* ══ GRAPH ═══════════════════════════════════════════════════════ */
+  {
+    grid:'graph', title:'Force-Directed Network', desc:'Nodes and links with physics simulation',
+    option:(()=>{
+      const nodes=[{id:'0',name:'Node 0',symbolSize:20},{id:'1',name:'Node 1',symbolSize:15},{id:'2',name:'Node 2',symbolSize:18},
+                   {id:'3',name:'Node 3',symbolSize:10},{id:'4',name:'Node 4',symbolSize:14},{id:'5',name:'Node 5',symbolSize:22},
+                   {id:'6',name:'Node 6',symbolSize:12},{id:'7',name:'Node 7',symbolSize:16}];
+      const links=[{source:'0',target:'1'},{source:'0',target:'2'},{source:'1',target:'3'},{source:'2',target:'4'},
+                   {source:'3',target:'5'},{source:'4',target:'5'},{source:'5',target:'6'},{source:'6',target:'7'},{source:'7',target:'0'}];
+      return {
+        tooltip:{},
+        legend:[{data:['Graph']}],
+        animationDurationUpdate:1500,animationEasingUpdate:'quinticInOut',
+        series:[{type:'graph',layout:'force',data:nodes,links,
+          roam:true,label:{show:true},force:{repulsion:100}}]
+      };
+    })()
+  },
+
+  /* ══ SANKEY ══════════════════════════════════════════════════════ */
+  {
+    grid:'sankey', title:'Energy Flow Sankey', desc:'Flow diagram showing source → conversion → use',
+    option:{
+      tooltip:{trigger:'item',triggerOn:'mousemove'},
+      series:[{
+        type:'sankey',layout:'none',
+        emphasis:{focus:'adjacency'},
+        data:[{name:'Coal'},{name:'Natural Gas'},{name:'Oil'},{name:'Electricity'},{name:'Industry'},{name:'Heating'},{name:'Transport'},{name:'Other'}],
+        links:[
+          {source:'Coal',target:'Electricity',value:300},{source:'Coal',target:'Industry',value:200},
+          {source:'Natural Gas',target:'Heating',value:220},{source:'Natural Gas',target:'Electricity',value:120},
+          {source:'Oil',target:'Transport',value:380},{source:'Oil',target:'Industry',value:80},
+          {source:'Electricity',target:'Industry',value:180},{source:'Electricity',target:'Other',value:150}
+        ]
+      }]
+    }
+  },
+
+  /* ══ PARALLEL ════════════════════════════════════════════════════ */
+  {
+    grid:'parallel', title:'Parallel Coordinates', desc:'Multi-dimensional data on parallel axes (AQI)',
+    option:{
+      parallelAxis:[
+        {dim:0,name:'Date'},{dim:1,name:'AQI'},{dim:2,name:'PM2.5'},{dim:3,name:'PM10'},
+        {dim:4,name:'CO'},{dim:5,name:'NO2'},{dim:6,name:'SO2'}
+      ],
+      parallel:{left:'5%',right:'13%',bottom:'10%',top:'20%'},
+      tooltip:{trigger:'axis',axisPointer:{type:'cross'}},
+      series:[{
+        type:'parallel',
+        lineStyle:{width:1,opacity:0.4},
+        data:[
+          [1,55,9,56,0.46,18,6],[2,25,11,21,0.65,34,9],[3,56,7,63,0.3,14,5],
+          [4,33,7,29,0.33,16,6],[5,42,24,44,0.76,40,16],[6,82,58,90,1.77,68,33],
+          [7,74,49,77,1.46,48,27],[8,78,55,80,1.29,59,29],[9,267,216,280,4.8,108,43],
+          [10,185,127,216,2.52,67,51],[11,39,19,38,0.57,31,15],[12,41,11,40,0.87,31,7]
+        ]
+      }]
+    }
+  },
+
+  /* ══ CHORD ═══════════════════════════════════════════════════════ */
+  {
+    grid:'chord', title:'Chord Diagram (v6+)', desc:'Circular flow diagram — requires ECharts v6.0.0+',
+    requiresChord: true,
+    option:{
+      series:[{
+        type:'chord',
+        radius:'70%',
+        data:['Japan','Korea','China','Australia','Thailand'],
+        links:[
+          {source:'Japan',target:'China',value:9.001236},
+          {source:'China',target:'Japan',value:9.001236},
+          {source:'Japan',target:'Korea',value:0.591931},
+          {source:'Korea',target:'Japan',value:0.591931},
+          {source:'China',target:'Korea',value:0.174712},
+          {source:'Korea',target:'China',value:0.174712},
+          {source:'Australia',target:'China',value:2.717908},
+          {source:'China',target:'Australia',value:2.717908},
+          {source:'Thailand',target:'China',value:0.809623},
+          {source:'China',target:'Thailand',value:0.809623}
+        ]
+      }]
+    }
+  },
+
+  /* ══ FUNNEL ══════════════════════════════════════════════════════ */
+  {
+    grid:'funnel', title:'Sales Conversion Funnel', desc:'Funnel showing stages of a conversion process',
+    option:{
+      tooltip:{trigger:'item',formatter:'{a} <br/>{b} : {c}%'},
+      legend:{data:['Show','Click','Visit','Inquiry','Order']},
+      series:[{
+        name:'Conversion',type:'funnel',
+        left:'10%',top:60,bottom:60,width:'80%',min:0,max:100,
+        minSize:'0%',maxSize:'100%',sort:'descending',gap:2,
+        label:{show:true,position:'inside'},
+        labelLine:{length:10,lineStyle:{width:1,type:'solid'}},
+        itemStyle:{borderColor:'#fff',borderWidth:1},
+        data:[{value:60,name:'Visit'},{value:40,name:'Inquiry'},{value:20,name:'Order'},
+              {value:80,name:'Click'},{value:100,name:'Show'}]
+      }]
+    }
+  },
+
+  /* ══ GAUGE ═══════════════════════════════════════════════════════ */
+  {
+    grid:'gauge', title:'KPI Progress Gauge', desc:'Ring-style gauge with progress indication',
+    option:{
+      series:[{
+        type:'gauge',radius:'90%',
+        progress:{show:true,width:18},
+        pointer:{icon:'path://M12.8,0.7l12.3,24.9H0.5L12.8,0.7z',length:'12%',width:20},
+        axisLine:{lineStyle:{width:18}},
+        axisTick:{distance:-30,length:8,lineStyle:{color:'#fff',width:2}},
+        splitLine:{distance:-30,length:30,lineStyle:{color:'#fff',width:4}},
+        axisLabel:{distance:-20,color:'#999',fontSize:14},
+        anchor:{show:true,showAbove:true,size:25,itemStyle:{borderWidth:10}},
+        title:{show:false},
+        detail:{valueAnimation:true,fontSize:60,offsetCenter:[0,'70%']},
+        data:[{value:70}]
+      }]
+    }
+  },
+  {
+    grid:'gauge', title:'Multi-Ring Progress', desc:'Three concentric progress rings for KPIs',
+    option:{
+      series:[
+        {type:'gauge',startAngle:90,endAngle:-270,pointer:{show:false},progress:{show:true,overlap:false,roundCap:true,clip:false,itemStyle:{borderWidth:1,borderColor:'#464646'}},axisLine:{lineStyle:{width:40}},splitLine:{show:false},axisTick:{show:false},axisLabel:{show:false},data:[{value:70,name:'Work',itemStyle:{color:'#FFDE73'}},{value:50,name:'Learn',itemStyle:{color:'#67E0E3'}},{value:30,name:'Rest',itemStyle:{color:'#37A2FF'}}],detail:{width:40,height:14,fontSize:14,color:'inherit',borderColor:'inherit',borderRadius:20,borderWidth:1,formatter:'{value}%'}},
+      ]
+    }
+  },
+
+  /* ══ PICTORIAL ═══════════════════════════════════════════════════ */
+  {
+    grid:'pictorial', title:'PictorialBar (Fixed Symbol)', desc:'Each bar unit is a repeated symbol icon',
+    option:{
+      xAxis:{data:['Cats','Dogs','Birds','Rabbits','Fish']},
+      yAxis:{},
+      series:[{
+        type:'pictorialBar',
+        symbol:'roundRect',symbolSize:[20,8],symbolMargin:3,symbolRepeat:true,
+        data:[
+          {value:5,itemStyle:{color:'#5470c6'}},
+          {value:12,itemStyle:{color:'#91cc75'}},
+          {value:3,itemStyle:{color:'#fac858'}},
+          {value:8,itemStyle:{color:'#ee6666'}},
+          {value:15,itemStyle:{color:'#73c0de'}}
+        ]
+      }]
+    }
+  },
+
+  /* ══ THEMERIVER ══════════════════════════════════════════════════ */
+  {
+    grid:'themeriver', title:'ThemeRiver (Stacked Stream)', desc:'Temporal evolution of categorical data',
+    option:{
+      tooltip:{trigger:'axis',axisPointer:{type:'line',lineStyle:{color:'rgba(0,0,0,0.2)',width:1,type:'solid'}}},
+      legend:{data:['Topic A','Topic B','Topic C']},
+      singleAxis:{type:'time',left:50,right:50,bottom:'5%',data:[]},
+      series:[{
+        type:'themeRiver',
+        emphasis:{itemStyle:{shadowBlur:20,shadowColor:'rgba(0,0,0,.8)'}},
+        data:[
+          ['2015/11/08 08:00:00',10,'Topic A'],['2015/11/09 08:00:00',15,'Topic A'],
+          ['2015/11/10 08:00:00',35,'Topic A'],['2015/11/11 08:00:00',38,'Topic A'],
+          ['2015/11/12 08:00:00',22,'Topic A'],['2015/11/13 08:00:00',16,'Topic A'],
+          ['2015/11/08 08:00:00',35,'Topic B'],['2015/11/09 08:00:00',36,'Topic B'],
+          ['2015/11/10 08:00:00',37,'Topic B'],['2015/11/11 08:00:00',22,'Topic B'],
+          ['2015/11/12 08:00:00',24,'Topic B'],['2015/11/13 08:00:00',26,'Topic B'],
+          ['2015/11/08 08:00:00',21,'Topic C'],['2015/11/09 08:00:00',25,'Topic C'],
+          ['2015/11/10 08:00:00',27,'Topic C'],['2015/11/11 08:00:00',23,'Topic C'],
+          ['2015/11/12 08:00:00',35,'Topic C'],['2015/11/13 08:00:00',42,'Topic C']
+        ]
+      }]
+    }
+  },
+
+  /* ══ CALENDAR ════════════════════════════════════════════════════ */
+  {
+    grid:'calendar', title:'GitHub Activity Heatmap', desc:'Activity calendar — contributions per day',
+    option:(()=>{
+      function getVirtDate(year){
+        const data=[]; const s=+new Date(`${year}-01-01`), e=+new Date(`${year}-12-31`);
+        for(let t=s;t<=e;t+=86400000) data.push([echarts.format.formatTime('yyyy-MM-dd',t),Math.floor(Math.random()*10)]);
+        return data;
+      }
+      return {
+        visualMap:{show:true,min:0,max:10,type:'piecewise',orient:'horizontal',left:'center',top:230},
+        calendar:{top:80,left:30,right:30,cellSize:['auto',13],range:'2023',
+          itemStyle:{borderWidth:.5},dayLabel:{nameMap:'short'},monthLabel:{show:true},yearLabel:{show:false}},
+        series:[{type:'heatmap',coordinateSystem:'calendar',data:getVirtDate(2023)}]
+      };
+    })()
+  },
+
+  /* ══ CUSTOM ══════════════════════════════════════════════════════ */
+  {
+    grid:'custom', title:'Gantt Chart (Custom Series)', desc:'Gantt-style timeline using renderItem',
+    option:(()=>{
+      const categories=['Planning','Development','Testing','Deployment'];
+      const DayMs=86400000;
+      const baseDate=+new Date('2024-01-01');
+      const tasks=[
+        {name:'Requirements',cat:0,start:0,end:5},{name:'Design',cat:0,start:4,end:10},
+        {name:'Backend',cat:1,start:8,end:22},{name:'Frontend',cat:1,start:12,end:25},
+        {name:'Unit Tests',cat:2,start:20,end:27},{name:'Integration',cat:2,start:24,end:30},
+        {name:'Staging',cat:3,start:28,end:33},{name:'Production',cat:3,start:32,end:36}
+      ];
+      const colors=['#5470c6','#91cc75','#fac858','#ee6666'];
+      return {
+        tooltip:{formatter:p=>{if(p.componentType==='series'){const d=p.data;return `${d[4]}<br/>${new Date(d[1]).toLocaleDateString()} — ${new Date(d[2]).toLocaleDateString()}`;}return '';}},
+        grid:{height:'60%'},
+        xAxis:{min:baseDate,scale:true,axisLabel:{formatter:v=>new Date(v).toLocaleDateString('en',{month:'short',day:'numeric'})}},
+        yAxis:{data:categories},
+        series:[{
+          type:'custom',
+          renderItem:(params,api)=>{
+            const catIdx=api.value(0),start=api.coord([api.value(1),catIdx]),end=api.coord([api.value(2),catIdx]);
+            const h=api.size([0,1])[1]*0.6;
+            return {type:'rect',transition:['shape'],shape:{x:start[0],y:start[1]-h/2,width:end[0]-start[0],height:h},
+              style:{fill:colors[catIdx],stroke:echarts.color.lift(colors[catIdx],0.5),lineWidth:1}};
+          },
+          encode:{x:[1,2],y:0},
+          data:tasks.map(t=>[t.cat,baseDate+t.start*DayMs,baseDate+t.end*DayMs,0,t.name])
+        }]
+      };
+    })()
+  },
+
+  /* ══ DATASET ═════════════════════════════════════════════════════ */
+  {
+    grid:'dataset', title:'Dataset Multi-Chart', desc:'Single dataset driving bar + line + scatter',
+    option:{
+      legend:{},
+      tooltip:{},
+      dataset:{source:[
+        ['product','2021','2022','2023'],
+        ['Matcha Latte',43.3,85.8,93.7],['Milk Tea',83.1,73.4,55.1],
+        ['Cheese Cocoa',86.4,65.2,82.5],['Walnut Brownie',72.4,53.9,39.1]
+      ]},
+      xAxis:{type:'category'},yAxis:{},
+      series:[{type:'bar'},{type:'bar'},{type:'bar'}]
+    }
+  },
+
+  /* ══ DATAZOOM ════════════════════════════════════════════════════ */
+  {
+    grid:'datazoom', title:'DataZoom Slider + Inside', desc:'Brush/scroll to zoom and pan time series',
+    option:(()=>{
+      const data=[]; let base=-Math.random()*1000;
+      for(let i=0;i<500;i++){base+=Math.random()*21-10;data.push(+base.toFixed(2));}
+      return {
+        tooltip:{trigger:'axis',axisPointer:{type:'cross'}},
+        grid:{left:'3%',right:'4%',bottom:100,containLabel:true},
+        xAxis:{type:'category',boundaryGap:false,data:Array.from({length:500},(_,i)=>`Day ${i+1}`)},
+        yAxis:{type:'value'},
+        dataZoom:[{type:'inside',start:0,end:15},{type:'slider',start:0,end:15}],
+        series:[{type:'line',smooth:true,symbol:'none',data}]
+      };
+    })()
+  },
+
+  /* ══ MIXED ═══════════════════════════════════════════════════════ */
+  {
+    grid:'mixed', title:'Rainfall + Temperature', desc:'Mixed bar (rainfall) and line (temperature) with dual Y-axes',
+    option:{
+      tooltip:{trigger:'axis',axisPointer:{type:'cross',crossStyle:{color:'#999'}}},
+      toolbox:{feature:{dataView:{show:true,readOnly:false},magicType:{show:true,type:['line','bar']},restore:{show:true},saveAsImage:{show:true}}},
+      legend:{data:['Evaporation','Precipitation','Temperature']},
+      xAxis:[{type:'category',data:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],axisPointer:{type:'shadow'}}],
+      yAxis:[{type:'value',name:'Water',min:0,max:250,interval:50,axisLabel:{formatter:'{value} ml'}},
+             {type:'value',name:'Temp',min:0,max:25,interval:5,axisLabel:{formatter:'{value} °C'}}],
+      series:[
+        {name:'Evaporation',type:'bar',data:[2.0,4.9,7.0,23.2,25.6,76.7,135.6,162.2,32.6,20.0,6.4,3.3]},
+        {name:'Precipitation',type:'bar',data:[2.6,5.9,9.0,26.4,28.7,70.7,175.6,182.2,48.7,18.8,6.0,2.3]},
+        {name:'Temperature',type:'line',yAxisIndex:1,data:[2.0,2.2,3.3,4.5,6.3,10.2,20.3,23.4,23.0,16.5,12.0,6.2]}
+      ]
+    }
+  },
+
+  /* ══ REALTIME ════════════════════════════════════════════════════ */
+  {
+    grid:'realtime', title:'Real-Time Line Chart', desc:'Live updating chart with setInterval (1 Hz)',
+    realtime: true,
+    option:(()=>{
+      const data=[];
+      for(let i=0;i<20;i++) data.push({value:[Date.now()-((19-i)*1000),+(Math.random()*100).toFixed(2)]});
+      return {
+        tooltip:{trigger:'axis',formatter:p=>`${new Date(p[0].value[0]).toLocaleTimeString()}: ${p[0].value[1]}`},
+        xAxis:{type:'time',splitLine:{show:false}},
+        yAxis:{type:'value',boundaryGap:[0,'100%'],splitLine:{show:false}},
+        series:[{name:'Signal',type:'line',showSymbol:false,data}]
+      };
+    })()
+  },
+
+  /* ══ 3D ══════════════════════════════════════════════════════════ */
+  {
+    grid:'3d', title:'3D Bar Chart', desc:'Three-dimensional bar grid — requires echarts-gl',
+    requiresGL: true,
+    option:(()=>{
+      const data=[];
+      for(let i=0;i<5;i++) for(let j=0;j<5;j++) data.push([i,j,Math.round(Math.random()*50)]);
+      return {
+        tooltip:{},
+        visualMap:{max:50,inRange:{color:['#313695','#4575b4','#74add1','#abd9e9','#e0f3f8','#ffffbf','#fee090','#fdae61','#f46d43','#d73027','#a50026']}},
+        xAxis3D:{type:'category',data:['A','B','C','D','E']},
+        yAxis3D:{type:'category',data:['V','W','X','Y','Z']},
+        zAxis3D:{type:'value'},
+        grid3D:{viewControl:{projection:'orthographic',beta:20,alpha:30}},
+        series:[{type:'bar3D',data,shading:'color',label:{show:false}}]
+      };
+    })()
+  },
+  {
+    grid:'3d', title:'3D Scatter Plot', desc:'Three-dimensional scatter — requires echarts-gl',
+    requiresGL: true,
+    option:(()=>{
+      const data=Array.from({length:80},()=>[Math.random()*10-5,Math.random()*10-5,Math.random()*10-5,Math.random()*10]);
+      return {
+        tooltip:{},
+        visualMap:{max:10,inRange:{color:['#1710c0','#0b9df0','#00fea8','#00ff0d','#f5f811','#f09a09','#fe0300']}},
+        xAxis3D:{type:'value'},yAxis3D:{type:'value'},zAxis3D:{type:'value'},
+        grid3D:{viewControl:{beta:20,alpha:30}},
+        series:[{type:'scatter3D',data,symbolSize:10,
+          itemStyle:{opacity:.8}}]
+      };
+    })()
+  }
+];
+
+/* ─── Rendering engine ────────────────────────────────────────── */
+const charts = [];  // track for dispose
+let rtChart = null; // real-time chart reference
+let rtInterval = null;
+
+function jsonFmt(obj, indent=2) {
+  return JSON.stringify(obj, null, indent);
+}
+
+function makeCard(ex) {
+  const id = 'chart-' + Math.random().toString(36).slice(2,10);
+
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <div class="card-header">
+      <div class="card-title">${ex.title}</div>
+      <div class="card-desc">${ex.desc}</div>
+    </div>
+    <div class="chart-wrap" id="wrap-${id}">
+      ${ex.requiresMap
+        ? `<div class="note">⚠️ Map charts require GeoJSON registration.<br>See <a href="examples/map.md" target="_blank">map.md</a> for full code.</div>`
+        : `<div id="${id}" style="width:100%;height:100%"></div>`
+      }
+    </div>
+    ${!ex.requiresMap ? `<div class="card-footer"><button class="btn-code" onclick="toggleCode('panel-${id}')">View Code</button></div>
+    <div class="code-panel" id="panel-${id}"><pre>${jsonFmt(ex.option||{})}</pre></div>` : ''}
+  `;
+
+  return { card, id, ex };
+}
+
+function toggleCode(panelId) {
+  const p = document.getElementById(panelId);
+  if (p) p.classList.toggle('open');
+}
+
+function initChart(id, ex) {
+  const el = document.getElementById(id);
+  if (!el) return;
+
+  if (ex.requiresGL) {
+    if (window.glFailed) {
+      el.parentElement.innerHTML = '<div class="note">⚠️ echarts-gl failed to load.<br>3D charts require echarts-gl CDN.</div>';
+      return;
+    }
+  }
+
+  const chart = echarts.init(el);
+  charts.push(chart);
+
+  if (ex.requiresChord) {
+    // Test if chord type is available (v6+)
+    try {
+      chart.setOption(ex.option);
+    } catch(e) {
+      chart.dispose();
+      el.parentElement.innerHTML = '<div class="note">ℹ️ Chord series requires ECharts v6.0.0+.<br>Current v5 bundle does not include it.<br><a href="https://echarts.apache.org/examples/en/editor.html?c=chord-simple" target="_blank">View on official site ↗</a></div>';
+      return;
+    }
+    return;
+  }
+
+  chart.setOption(ex.option);
+
+  if (ex.realtime) {
+    rtChart = chart;
+    if (rtInterval) clearInterval(rtInterval);
+    rtInterval = setInterval(() => {
+      if (!rtChart) return;
+      const opt = rtChart.getOption();
+      const series = opt.series[0];
+      const data = series.data.slice();
+      data.shift();
+      data.push({ value: [Date.now(), +(Math.random()*100).toFixed(2)] });
+      rtChart.setOption({ series: [{ data }] });
+    }, 1000);
+  }
+
+  // Responsive
+  const ro = new ResizeObserver(() => chart.resize());
+  ro.observe(el);
+}
+
+/* ─── Build grid ──────────────────────────────────────────────── */
+window.addEventListener('DOMContentLoaded', () => {
+  const GRID_IDS = ['bar','line','pie','scatter','candlestick','boxplot','heatmap','radar',
+                    'map','tree','treemap','sunburst','graph','sankey','parallel','chord',
+                    'funnel','gauge','pictorial','themeriver','calendar','custom',
+                    'dataset','datazoom','mixed','realtime','3d'];
+
+  const items = [];
+
+  EXAMPLES.forEach(ex => {
+    const gridEl = document.getElementById(`grid-${ex.grid}`);
+    if (!gridEl) return;
+    const { card, id } = makeCard(ex);
+    gridEl.appendChild(card);
+    items.push({ id, ex });
+  });
+
+  // Use IntersectionObserver to lazy-init charts
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.dataset.chartId;
+        if (id) {
+          const item = items.find(i => i.id === id);
+          if (item && !item.initialized) {
+            item.initialized = true;
+            initChart(id, item.ex);
+          }
+        }
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  // Attach observer to chart wrappers
+  items.forEach(({ id, ex }) => {
+    const wrapEl = document.getElementById(`wrap-${id}`);
+    if (wrapEl && !ex.requiresMap) {
+      wrapEl.dataset.chartId = id;
+      observer.observe(wrapEl);
+    }
+  });
+
+  // Sidebar active link on scroll
+  const sections = document.querySelectorAll('#main h2[id]');
+  const links = document.querySelectorAll('#sidebar a');
+  const scrollTarget = document.getElementById('main');
+
+  function updateActiveLink() {
+    let active = null;
+    sections.forEach(s => {
+      if (s.getBoundingClientRect().top <= 80) active = s.id;
+    });
+    links.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === `#${active}`);
+    });
+  }
+  document.addEventListener('scroll', updateActiveLink, { passive: true });
+  window.addEventListener('scroll', updateActiveLink, { passive: true });
+
+  // Init all visible charts immediately (above fold)
+  setTimeout(() => {
+    items.forEach(item => {
+      if (item.ex.requiresMap || item.initialized) return;
+      const wrapEl = document.getElementById(`wrap-${item.id}`);
+      if (wrapEl) {
+        const rect = wrapEl.getBoundingClientRect();
+        if (rect.top < window.innerHeight + 200) {
+          item.initialized = true;
+          initChart(item.id, item.ex);
+        }
+      }
+    });
+  }, 200);
+});
+
+// Expose toggleCode globally
+window.toggleCode = toggleCode;
+</script>
+</body>
+</html>
