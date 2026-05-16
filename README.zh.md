@@ -4,9 +4,9 @@
 
 ---
 
-# Apache ECharts — GitHub Copilot AI 技能
+# Apache ECharts — AI 技能
 
-> 一套完整的 GitHub Copilot 技能，可根据自然语言描述，生成即用型 **Apache ECharts** 配置。  
+> 一套完整的 技能，可根据自然语言描述，生成即用型 **Apache ECharts** 配置。  
 > 覆盖官方示例库中的所有图表类型、所有配置组件，以及 React、Vue、原生 JS 的框架集成方案。
 
 [![ECharts](https://img.shields.io/badge/Apache%20ECharts-v5%2B-blue?logo=apache)](https://echarts.apache.org)
@@ -107,7 +107,7 @@
 
 ## ✨ 技能功能
 
-调用本技能后，Copilot 将：
+调用本技能后，Agent 将：
 
 - **生成完整的 `option` 配置对象** — 可直接传入 `chart.setOption()`，开箱即用
 - **自动选择最合适的图表类型** — 根据你的数据特征和使用场景智能判断
@@ -285,10 +285,10 @@ onBeforeUnmount(() => { chart?.dispose(); });
 ## 📁 文件结构
 
 ```
-.github/skills/echarts/
+skills/echarts/
 ├── README.md                   # 英文版说明（English）
 ├── README.zh.md                # ← 当前文件（中文）
-├── SKILL.md                    # 技能主定义文件（由 Copilot 加载）
+├── SKILL.md                    # 技能主定义文件（由 Agent 加载）
 ├── examples.html               # 🌐 在线交互式图表库（浏览器打开）
 │
 ├── assets/
@@ -331,8 +331,7 @@ onBeforeUnmount(() => { chart?.dispose(); });
 
 ## ⚙️ 技能工作原理
 
-本技能遵循 [GitHub Copilot 自定义指令](https://code.visualstudio.com/docs/copilot/copilot-customization) 格式。  
-被引用时，Copilot 会加载 `SKILL.md`，获取关于 ECharts API 的结构化知识。
+被引用时，Agent 会加载 `SKILL.md`，获取关于 ECharts API 的结构化知识。
 
 ### 调用方式
 
@@ -345,7 +344,7 @@ argument-hint: "Describe the chart you want (e.g., 'bar chart comparing monthly 
 
 ### 生成示例
 
-Copilot 将生成完整、自包含的 `option` 配置对象：
+Agent 将生成完整、自包含的 `option` 配置对象：
 
 ```js
 // 示例：「创建一个双 Y 轴图表，同时展示降雨量和气温」
@@ -428,7 +427,7 @@ series: [{
 | 资源 | 说明 |
 |------|------|
 | [examples.html](./examples.html) | **在线图表库** — 30 个实时渲染图表，含代码切换（浏览器打开） |
-| [SKILL.md](./SKILL.md) | 技能主定义文件（Copilot 加载入口） |
+| [SKILL.md](./SKILL.md) | 技能主定义文件（Agent 加载入口） |
 | [examples/README.md](./examples/README.md) | 25 个示例文件索引（每种图表 2-3 个 option） |
 | [assets/templates.md](./assets/templates.md) | React、Vue、tree-shaking 集成模板 |
 | [assets/official-examples.md](./assets/official-examples.md) | 官方示例分类目录（含编辑器链接） |

@@ -4,9 +4,9 @@
 
 ---
 
-# Apache ECharts — AI Skill for GitHub Copilot
+# Apache ECharts AI Skill
 
-> A comprehensive GitHub Copilot skill that generates complete, production-ready **Apache ECharts** configurations from natural-language descriptions.  
+> A comprehensive  skill that generates complete, production-ready **Apache ECharts** configurations from natural-language descriptions.  
 > Covers every chart type in the official gallery, all configuration components, and framework integrations for React, Vue, and plain JS.
 
 [![ECharts](https://img.shields.io/badge/Apache%20ECharts-v5%2B-blue?logo=apache)](https://echarts.apache.org)
@@ -107,7 +107,7 @@
 
 ## ✨ What This Skill Does
 
-When invoked, this skill instructs Copilot to:
+When invoked, this skill instructs Agent to:
 
 - **Generate complete `option` objects** — ready to drop into `chart.setOption()`
 - **Select the right chart type** for your data and use case automatically
@@ -286,10 +286,10 @@ onBeforeUnmount(() => { chart?.dispose(); });
 ## 📁 File Structure
 
 ```
-.github/skills/echarts/
+skills/echarts/
 ├── README.md                   # ← You are here (English)
 ├── README.zh.md                # Chinese version
-├── SKILL.md                    # Main skill definition (loaded by Copilot)
+├── SKILL.md                    # Main skill definition (loaded by Agent)
 ├── examples.html               # 🌐 Live interactive gallery (open in browser)
 │
 ├── assets/
@@ -332,8 +332,6 @@ onBeforeUnmount(() => { chart?.dispose(); });
 
 ## ⚙️ How the Skill Works
 
-This skill follows the [GitHub Copilot custom instructions](https://code.visualstudio.com/docs/copilot/copilot-customization) format.  
-When referenced, Copilot loads `SKILL.md` which provides structured knowledge about the ECharts API.
 
 ### Invocation
 
@@ -346,7 +344,7 @@ argument-hint: "Describe the chart you want (e.g., 'bar chart comparing monthly 
 
 ### What gets generated
 
-Copilot will produce a complete, self-contained `option` object:
+Agent will produce a complete, self-contained `option` object:
 
 ```js
 // Example: "Create a dual Y-axis chart showing rainfall and temperature"
@@ -429,7 +427,7 @@ series: [{
 | Resource | Description |
 |----------|-------------|
 | [examples.html](./examples.html) | **Live gallery** — 30 charts with code toggle (open in browser) |
-| [SKILL.md](./SKILL.md) | Main skill definition loaded by Copilot |
+| [SKILL.md](./SKILL.md) | Main skill definition loaded by Agent |
 | [examples/README.md](./examples/README.md) | Index of all 25 example files (2-3 options each) |
 | [assets/templates.md](./assets/templates.md) | React, Vue, tree-shaking integration patterns |
 | [assets/official-examples.md](./assets/official-examples.md) | Links to all official ECharts examples by type |
