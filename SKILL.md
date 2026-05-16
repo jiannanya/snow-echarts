@@ -1,10 +1,10 @@
 ---
-name: echarts
+name: snow-echarts
 description: "Create, configure, and customize Apache ECharts charts and visualizations. Use when: building charts with ECharts; selecting chart types (bar, line, pie, scatter, map, heatmap, radar, candlestick, funnel, gauge, tree, treemap, sankey, graph, boxplot, pictorialBar, themeRiver, sunburst, parallel, calendar, custom, matrix, chord, 3D/GL charts); configuring series, axes, legends, tooltips, dataZoom, visualMap, toolbox; using echarts.init, setOption, on/off events; implementing responsive charts; theme customization; large-data rendering optimization. Covers all chart types from the official examples gallery including v6 Matrix/Chord and echarts-gl 3D charts."
 argument-hint: "Describe the chart you want (e.g., 'bar chart comparing monthly sales', 'heatmap for correlation matrix')"
 ---
 
-# Apache ECharts Skill
+# snow-echarts Skill
 
 ## Overview
 

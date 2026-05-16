@@ -4,9 +4,9 @@
 
 ---
 
-# Apache ECharts AI Skill
+# snow-echarts AI Skill
 
-> A comprehensive  skill that generates complete, production-ready **Apache ECharts** configurations from natural-language descriptions.  
+> The snow-echarts skill generates complete, production-ready **Apache ECharts** configurations from natural-language descriptions.  
 > Covers every chart type in the official gallery, all configuration components, and framework integrations for React, Vue, and plain JS.
 
 [![ECharts](https://img.shields.io/badge/Apache%20ECharts-v5%2B-blue?logo=apache)](https://echarts.apache.org)
@@ -338,6 +338,7 @@ skills/echarts/
 The skill is automatically triggered when your prompt involves ECharts charting. The `description` in `SKILL.md` drives semantic matching:
 
 ```yaml
+name: snow-echarts
 description: "Create, configure, and customize Apache ECharts charts..."
 argument-hint: "Describe the chart you want (e.g., 'bar chart comparing monthly sales')"
 ```

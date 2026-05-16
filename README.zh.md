@@ -4,9 +4,9 @@
 
 ---
 
-# Apache ECharts — AI 技能
+# snow-echarts — AI 技能
 
-> 一套完整的 技能，可根据自然语言描述，生成即用型 **Apache ECharts** 配置。  
+> snow-echarts 是一套完整的技能，可根据自然语言描述，生成即用型 **Apache ECharts** 配置。  
 > 覆盖官方示例库中的所有图表类型、所有配置组件，以及 React、Vue、原生 JS 的框架集成方案。
 
 [![ECharts](https://img.shields.io/badge/Apache%20ECharts-v5%2B-blue?logo=apache)](https://echarts.apache.org)
@@ -338,6 +338,7 @@ skills/echarts/
 当你的提示词涉及 ECharts 图表时，技能会自动触发。`SKILL.md` 中的 `description` 字段驱动语义匹配：
 
 ```yaml
+name: snow-echarts
 description: "Create, configure, and customize Apache ECharts charts..."
 argument-hint: "Describe the chart you want (e.g., 'bar chart comparing monthly sales')"
 ```
