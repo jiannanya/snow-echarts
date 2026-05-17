@@ -234,6 +234,14 @@
 
 <script>
 /* ─── Example definitions ─────────────────────────────────────── */
+let rtData = [];
+
+function formatRealtimeLabel(value) {
+  const date = new Date(value);
+  const parts = [date.getHours(), date.getMinutes(), date.getSeconds()];
+  return parts.map(part => String(part).padStart(2, '0')).join(':');
+}
+
 const EXAMPLES = [
 
   /* ══ BAR ══════════════════════════════════════════════════════ */
@@ -841,13 +849,23 @@ const EXAMPLES = [
     grid:'realtime', title:'Real-Time Line Chart', desc:'Live updating chart with setInterval (1 Hz)',
     realtime: true,
     option:(()=>{
-      const data=[];
-      for(let i=0;i<20;i++) data.push({value:[Date.now()-((19-i)*1000),+(Math.random()*100).toFixed(2)]});
+      rtData = [];
+      for(let i=0;i<20;i++) rtData.push([Date.now()-((19-i)*1000), +(Math.random()*100).toFixed(2)]);
       return {
-        tooltip:{trigger:'axis',formatter:p=>`${new Date(p[0].value[0]).toLocaleTimeString()}: ${p[0].value[1]}`},
-        xAxis:{type:'time',splitLine:{show:false}},
+        tooltip:{trigger:'axis',formatter:p=>`${formatRealtimeLabel(p[0].value[0])}: ${p[0].value[1]}`},
+        grid:{left:44,right:18,top:18,bottom:36,containLabel:true},
+        xAxis:{
+          type:'time',
+          splitLine:{show:false},
+          splitNumber:5,
+          minInterval:1000,
+          axisLabel:{
+            hideOverlap:true,
+            formatter:value=>formatRealtimeLabel(value)
+          }
+        },
         yAxis:{type:'value',boundaryGap:[0,'100%'],splitLine:{show:false}},
-        series:[{name:'Signal',type:'line',showSymbol:false,data}]
+        series:[{name:'Signal',type:'line',showSymbol:false,data:rtData.slice()}]
       };
     })()
   },
@@ -957,12 +975,15 @@ function initChart(id, ex) {
     if (rtInterval) clearInterval(rtInterval);
     rtInterval = setInterval(() => {
       if (!rtChart) return;
-      const opt = rtChart.getOption();
-      const series = opt.series[0];
-      const data = series.data.slice();
-      data.shift();
-      data.push({ value: [Date.now(), +(Math.random()*100).toFixed(2)] });
-      rtChart.setOption({ series: [{ data }] });
+      rtData = rtData.slice(-19);
+      rtData.push([Date.now(), +(Math.random()*100).toFixed(2)]);
+      rtChart.setOption({
+        xAxis: {
+          min: rtData[0][0],
+          max: rtData[rtData.length - 1][0]
+        },
+        series: [{ data: rtData.map(point => point.slice()) }]
+      });
     }, 1000);
   }
 

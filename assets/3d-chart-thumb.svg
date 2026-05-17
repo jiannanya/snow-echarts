@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 240" role="img" aria-labelledby="title desc">
+  <title id="title">3D chart thumbnail</title>
+  <desc id="desc">Stylized isometric bars representing a 3D chart preview.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f6fbff" />
+      <stop offset="100%" stop-color="#dceeff" />
+    </linearGradient>
+    <linearGradient id="barA" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#5b8ff9" />
+      <stop offset="100%" stop-color="#2f54eb" />
+    </linearGradient>
+    <linearGradient id="barB" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#36cfc9" />
+      <stop offset="100%" stop-color="#08979c" />
+    </linearGradient>
+    <linearGradient id="barC" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffc53d" />
+      <stop offset="100%" stop-color="#fa8c16" />
+    </linearGradient>
+  </defs>
+
+  <rect width="360" height="240" rx="18" fill="url(#bg)" />
+  <path d="M58 174 L180 112 L302 174" fill="none" stroke="#a9c8e8" stroke-width="2" />
+  <path d="M58 174 L180 198 L302 174" fill="none" stroke="#a9c8e8" stroke-width="2" />
+  <path d="M118 143 L240 81" fill="none" stroke="#c6ddf2" stroke-width="1.5" stroke-dasharray="4 6" />
+  <path d="M118 143 L240 167" fill="none" stroke="#c6ddf2" stroke-width="1.5" stroke-dasharray="4 6" />
+  <path d="M180 112 L180 198" fill="none" stroke="#c6ddf2" stroke-width="1.5" stroke-dasharray="4 6" />
+
+  <g transform="translate(106 124)">
+    <polygon points="0 18 28 4 56 18 28 32" fill="#8eb5ff" />
+    <polygon points="0 18 0 78 28 92 28 32" fill="url(#barA)" />
+    <polygon points="56 18 56 78 28 92 28 32" fill="#1d39c4" opacity="0.88" />
+  </g>
+
+  <g transform="translate(164 96)">
+    <polygon points="0 18 28 4 56 18 28 32" fill="#7de4de" />
+    <polygon points="0 18 0 106 28 120 28 32" fill="url(#barB)" />
+    <polygon points="56 18 56 106 28 120 28 32" fill="#006d75" opacity="0.88" />
+  </g>
+
+  <g transform="translate(222 138)">
+    <polygon points="0 18 28 4 56 18 28 32" fill="#ffd978" />
+    <polygon points="0 18 0 64 28 78 28 32" fill="url(#barC)" />
+    <polygon points="56 18 56 64 28 78 28 32" fill="#d46b08" opacity="0.88" />
+  </g>
+
+  <circle cx="88" cy="57" r="6" fill="#5b8ff9" opacity="0.9" />
+  <circle cx="108" cy="57" r="6" fill="#36cfc9" opacity="0.9" />
+  <circle cx="128" cy="57" r="6" fill="#ffc53d" opacity="0.9" />
+
+  <text x="164" y="59" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700" fill="#1f3b5b">3D Charts</text>
+  <text x="164" y="84" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#4e6e91">echarts-gl preview</text>
+</svg>

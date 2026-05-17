@@ -94,7 +94,7 @@
 </td>
 <td align="center" width="200">
   <a href="https://echarts.apache.org/examples/en/editor.html?c=bar3d-with-surface&gl=1">
-    <img src="https://echarts.apache.org/examples/data/thumb/bar3d-with-surface.webp" width="180" alt="3D图表"/>
+    <img src="./assets/3d-chart-thumb.svg" width="180" alt="3D图表"/>
   </a>
   <br/><sub><b>3D 图表（echarts-gl）</b></sub>
 </td>
