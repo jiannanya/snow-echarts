@@ -135,6 +135,13 @@ const data = Array.from({ length: 50 }, (_, i) => ({
   value: Math.round(Math.random() * 80 + 10)
 }));
 
+function formatRealtimeLabel(value) {
+  const date = new Date(value);
+  return [date.getHours(), date.getMinutes(), date.getSeconds()]
+    .map(part => String(part).padStart(2, '0'))
+    .join(':');
+}
+
 const chart = echarts.init(document.getElementById('chart'));
 
 const option = {
@@ -146,7 +153,7 @@ const option = {
   xAxis: {
     type: 'time',
     splitLine: { show: false },
-    axisLabel: { formatter: val => echarts.format.formatTime('HH:mm:ss', val) }
+    axisLabel: { formatter: val => formatRealtimeLabel(val) }
   },
   yAxis: {
     type: 'value',
